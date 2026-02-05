@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unified Customer Journey Map</title>
+    <title>Buyer Journey - Full Decision Tree</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,7 +16,7 @@
         }
         .container { max-width: 1200px; margin: 0 auto; }
         h1 { color: #1a1a2e; text-align: center; margin-bottom: 8px; }
-        .subtitle { color: #666; text-align: center; margin-bottom: 30px; }
+        .subtitle { color: #666; text-align: center; margin-bottom: 30px; font-size: 1.1rem; }
         .card {
             background: white;
             border-radius: 12px;
@@ -25,412 +26,400 @@
         }
         .card h2 {
             color: #1a1a2e;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             font-size: 1.25rem;
         }
+        .card h3 {
+            color: #333;
+            margin: 20px 0 12px;
+            font-size: 1.1rem;
+        }
         .mermaid { text-align: center; }
-
-        .framework-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-        .framework-box {
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-        }
-        .framework-box h3 { margin-bottom: 12px; }
-        .framework-box p { font-size: 0.9rem; color: #666; margin-bottom: 12px; }
-        .framework-box ul { text-align: left; margin-left: 20px; font-size: 0.85rem; }
-
-        .journey-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-        .journey-table th, .journey-table td {
-            padding: 12px 16px;
-            text-align: left;
-            border: 1px solid #e0e0e0;
-        }
-        .journey-table th { background: #f8f9fa; font-weight: 600; }
-        .journey-table .stage-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: 600;
-        }
-
-        .status-inactive { background: #ffcdd2; }
-        .status-engaged { background: #b2ebf2; }
-        .status-active { background: #c8e6c9; }
-        .status-opp { background: #fff9c4; }
-        .status-customer { background: #ffcc80; }
-        .status-nurture { background: #e1bee7; }
 
         .rl1 { background: #c8e6c9; }
         .rl2 { background: #fff3e0; }
         .rl3 { background: #e3f2fd; }
 
-        .tool-unify { color: #1565c0; font-weight: 600; }
-        .tool-outreach { color: #2e7d32; font-weight: 600; }
-        .tool-marketo { color: #7b1fa2; font-weight: 600; }
-
-        .legend {
-            display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
-            margin-top: 16px;
-            padding: 16px;
-            background: #f5f5f5;
-            border-radius: 8px;
+        .sequence-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
         }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .sequence-card {
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        .sequence-card h4 {
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+        .touch {
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+        .touch-num {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .entry-point {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        .entry-tal { background: #e8f5e9; color: #2e7d32; border: 2px solid #4caf50; }
+        .entry-event { background: #e3f2fd; color: #1565c0; border: 2px solid #2196f3; }
+        .entry-page { background: #fce4ec; color: #c2185b; border: 2px solid #e91e63; }
+
+        .variant-table {
+            width: 100%;
+            border-collapse: collapse;
             font-size: 0.85rem;
         }
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
+        .variant-table th, .variant-table td {
+            padding: 10px 12px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        .variant-table th {
+            background: #f5f5f5;
+            font-weight: 600;
         }
 
-        .question-box {
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
+        .note-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
             padding: 16px;
             margin-top: 16px;
             border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Unified Customer Journey Map</h1>
-        <p class="subtitle">Mapping Account Status + Readiness Level + Contact Status → Tool & Content Selection</p>
+        <h1>Buyer Journey Decision Tree</h1>
+        <p class="subtitle">Entry Points → Readiness Level → Sequence (by Industry + Persona) → Outcomes</p>
 
-        <!-- The Three Frameworks -->
+        <!-- Entry Points Overview -->
         <div class="card">
-            <h2>The Three Frameworks</h2>
-            <div class="framework-grid">
-                <div class="framework-box" style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border: 2px solid #4caf50;">
-                    <h3>Account Status</h3>
-                    <p><strong>"Who should we target?"</strong></p>
-                    <p>Account-level. Where is this account in their journey?</p>
-                    <ul>
-                        <li>Inactive</li>
-                        <li>Engaged</li>
-                        <li>Active Outreach</li>
-                        <li>Open Opportunity</li>
-                        <li>Customer</li>
-                    </ul>
-                </div>
-                <div class="framework-box" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border: 2px solid #2196f3;">
-                    <h3>Readiness Level</h3>
-                    <p><strong>"How much should we invest?"</strong></p>
-                    <p>Marketing segmentation. Budget & channel allocation.</p>
-                    <ul>
-                        <li>RL1 (Sales Ready) - HIGH</li>
-                        <li>RL2 (Aware) - MEDIUM</li>
-                        <li>RL3 (Unaware) - LOW</li>
-                    </ul>
-                </div>
-                <div class="framework-box" style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border: 2px solid #ff9800;">
-                    <h3>Contact Status</h3>
-                    <p><strong>"What message should we send?"</strong></p>
-                    <p>Person-level. How engaged is this contact?</p>
-                    <ul>
-                        <li>New → Prospect → MQL</li>
-                        <li>Working → SQL</li>
-                        <li>Customer</li>
-                        <li>Nurture / Deprioritized</li>
-                    </ul>
-                </div>
+            <h2>1. Entry Points (What triggers the journey?)</h2>
+            <p style="margin-bottom: 16px;">Accounts enter the automated journey through one of these triggers:</p>
+
+            <div style="margin-bottom: 20px;">
+                <span class="entry-point entry-tal">🆕 New Account Added to TAL</span>
+                <span class="entry-point entry-event">📅 Event Attendee List</span>
+                <span class="entry-point entry-page">🔥 High-Value Page Visit</span>
             </div>
-            <div style="text-align: center; padding: 20px; background: #f5f5f5; border-radius: 8px;">
-                <strong>How they connect:</strong><br/>
-                Account Status tells us <em>where</em> they are → Readiness Level tells us <em>how much to invest</em> → Contact Status tells us <em>what to say</em>
-            </div>
-        </div>
 
-        <!-- The Journey Flow -->
-        <div class="card">
-            <h2>The Customer Journey Flow</h2>
-            <div class="mermaid">
-flowchart LR
-    subgraph COLD["COLD (RL3)"]
-        I["Inactive<br/>No activity 60+ days"]
-    end
-
-    subgraph WARM["WARM (RL2/RL1)"]
-        E["Engaged<br/>Marketing activity"]
-        A["Active Outreach<br/>Sales working"]
-    end
-
-    subgraph PIPELINE["PIPELINE"]
-        O["Open Opp<br/>S0 created"]
-        C["Customer<br/>Won"]
-    end
-
-    subgraph EXIT["EXIT"]
-        N["Nurture<br/>(cooling)"]
-        D["Disqualified"]
-    end
-
-    I -->|"Engagement signal"| E
-    E -->|"Sales contacts"| A
-    A -->|"Opp created"| O
-    O -->|"Closed Won"| C
-    O -->|"Closed Lost"| N
-    A -->|"No traction"| N
-    N -->|"Re-engages"| E
-    A -->|"Bad fit"| D
-    I -->|"Bad fit"| D
-
-    style I fill:#ffcdd2,stroke:#e57373
-    style E fill:#b2ebf2,stroke:#4dd0e1
-    style A fill:#c8e6c9,stroke:#81c784
-    style O fill:#fff9c4,stroke:#fff176
-    style C fill:#ffcc80,stroke:#ffb74d
-    style N fill:#e1bee7,stroke:#ba68c8
-    style D fill:#cfd8dc,stroke:#90a4ae
-            </div>
-        </div>
-
-        <!-- The Mapping Table -->
-        <div class="card">
-            <h2>Account Status → Readiness → Tool → Action</h2>
-            <table class="journey-table">
+            <table class="variant-table">
                 <thead>
                     <tr>
-                        <th>Account Status</th>
-                        <th>Typical Readiness</th>
-                        <th>SDR Tool</th>
-                        <th>Content Type</th>
-                        <th>Rep Involvement</th>
+                        <th>Entry Point</th>
+                        <th>What Triggers It</th>
+                        <th>Default RL</th>
+                        <th>What Happens</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="status-inactive">
-                        <td><strong>Inactive</strong><br/><span style="font-size: 0.8rem;">No activity 60+ days</span></td>
-                        <td class="rl3"><strong>RL3</strong> (Unaware)</td>
-                        <td class="tool-unify">Unify (automated)</td>
-                        <td>Thought leadership, benchmarks, brand awareness</td>
-                        <td>None until engagement</td>
-                    </tr>
-                    <tr class="status-engaged">
-                        <td><strong>Engaged</strong><br/><span style="font-size: 0.8rem;">Marketing engagement</span></td>
-                        <td class="rl2"><strong>RL2</strong> (Aware)<br/>or <strong>RL1</strong> if high-intent</td>
-                        <td>
-                            <span class="tool-outreach">Outreach</span> (high-tier)<br/>
-                            <span class="tool-unify">Unify</span> (lower-tier)
-                        </td>
-                        <td>Guides, playbooks, case studies, webinars</td>
-                        <td>Monitor for MQL; prepare to engage</td>
-                    </tr>
-                    <tr class="status-active">
-                        <td><strong>Active Outreach</strong><br/><span style="font-size: 0.8rem;">Sales working</span></td>
-                        <td class="rl1"><strong>RL1</strong> (Sales Ready)</td>
-                        <td class="tool-outreach">Outreach.io (1:1)</td>
-                        <td>Demos, ROI calculators, reference calls, POC frameworks</td>
-                        <td>Rep owns the relationship</td>
-                    </tr>
-                    <tr class="status-opp">
-                        <td><strong>Open Opportunity</strong><br/><span style="font-size: 0.8rem;">S0 created</span></td>
-                        <td class="rl1"><strong>RL1</strong> (Sales Ready)</td>
-                        <td class="tool-outreach">Outreach.io (1:1)</td>
-                        <td>Architecture deep dives, security docs, implementation plans</td>
-                        <td>Rep + SE own deal</td>
-                    </tr>
-                    <tr class="status-customer">
-                        <td><strong>Customer</strong></td>
-                        <td>N/A</td>
-                        <td class="tool-marketo">Marketo (lifecycle)</td>
-                        <td>Onboarding, adoption, expansion</td>
-                        <td>CSM owns relationship</td>
-                    </tr>
-                    <tr class="status-nurture">
-                        <td><strong>Nurture</strong><br/><span style="font-size: 0.8rem;">Cooling 60 days</span></td>
-                        <td class="rl3"><strong>RL3</strong> (reset)</td>
-                        <td class="tool-marketo">Marketo (nurture)</td>
-                        <td>Drip campaigns, newsletters, thought leadership</td>
-                        <td>None; system nurtures</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="legend">
-                <div class="legend-item"><div class="legend-color" style="background: #c8e6c9;"></div> RL1 = Outreach.io</div>
-                <div class="legend-item"><div class="legend-color" style="background: #fff3e0;"></div> RL2 = Outreach or Unify</div>
-                <div class="legend-item"><div class="legend-color" style="background: #e3f2fd;"></div> RL3 = Unify or Marketo</div>
-            </div>
-        </div>
-
-        <!-- Contact Status Overlay -->
-        <div class="card">
-            <h2>Contact Status = Message Personalization Layer</h2>
-            <p style="margin-bottom: 16px;">Within any Account Status, individual contacts have their own status that determines messaging:</p>
-
-            <table class="journey-table">
-                <thead>
                     <tr>
-                        <th>Contact Status</th>
-                        <th>Definition</th>
-                        <th>Message Strategy</th>
+                        <td><strong>New TAL Account</strong></td>
+                        <td>Account added to Target Account List (no prior engagement)</td>
+                        <td class="rl3"><strong>RL3</strong></td>
+                        <td>Unify runs RL3 sequence (cold outreach, awareness)</td>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr style="background: #f5f5f5;">
-                        <td><strong>New</strong></td>
-                        <td>Just created, no engagement yet</td>
-                        <td>Intro messaging, value prop, brand awareness</td>
+                    <tr>
+                        <td><strong>Event Attendee List</strong></td>
+                        <td>Account is registered for event (eTail, Shoptalk, etc.)</td>
+                        <td>Check RL</td>
+                        <td>Unify runs event-specific sequence based on their RL</td>
                     </tr>
-                    <tr style="background: #fff9c4;">
-                        <td><strong>Prospect</strong></td>
-                        <td>Campaign response, meets basic fit</td>
-                        <td>Follow up on specific interest, offer more content</td>
-                    </tr>
-                    <tr style="background: #ffeb3b;">
-                        <td><strong>MQL</strong></td>
-                        <td>"Cream of the crop" - high fit + high engagement</td>
-                        <td>Direct outreach, demo offers, case studies for their vertical</td>
-                    </tr>
-                    <tr style="background: #c8e6c9;">
-                        <td><strong>Working</strong></td>
-                        <td>Rep actively communicating</td>
-                        <td>1:1 personalized, reference their specific pain points</td>
-                    </tr>
-                    <tr style="background: #81c784;">
-                        <td><strong>SQL</strong></td>
-                        <td>Added to opportunity</td>
-                        <td>Deal-specific content, technical deep dives, ROI justification</td>
-                    </tr>
-                    <tr style="background: #e1bee7;">
-                        <td><strong>Nurture</strong></td>
-                        <td>Not ready; needs more nurturing</td>
-                        <td>Drip content, stay top of mind, don't push for meeting</td>
+                    <tr>
+                        <td><strong>High-Value Page Visit</strong></td>
+                        <td>Visits pricing, demo request, product page, or case studies</td>
+                        <td class="rl1"><strong>RL1</strong></td>
+                        <td>Immediate upgrade to RL1. Unify runs high-intent sequence.</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- How Outreach Tools Fit -->
-        <div class="card" style="border: 2px solid #667eea;">
-            <h2>Where Unify, Outreach.io, and Marketo Fit</h2>
+        <!-- The Main Flow -->
+        <div class="card">
+            <h2>2. The Main Decision Flow</h2>
             <div class="mermaid">
 flowchart TD
-    subgraph MARKETO["MARKETO (Lifecycle Nurture)"]
-        M1["Customer onboarding"]
-        M2["Newsletter/thought leadership"]
-        M3["Nurture cooling accounts"]
+    subgraph ENTRY["ENTRY POINTS"]
+        E1["🆕 New TAL Account"]
+        E2["📅 Event Attendee List"]
+        E3["🔥 High-Value Page Visit"]
     end
 
-    subgraph UNIFY["UNIFY (Automated Outbound)"]
-        U1["Cold outreach to Inactive (RL3)"]
-        U2["Lower-tier Engaged accounts (RL2)"]
-        U3["Batch campaigns by segment"]
-        U4["Website trigger plays"]
+    E1 --> RL_CHECK{"Check<br/>Readiness Level"}
+    E2 --> RL_CHECK
+    E3 -->|"Auto-upgrade"| RL1_PATH
+
+    RL_CHECK -->|"No activity<br/>(RL3)"| RL3_PATH["RL3 SEQUENCES"]
+    RL_CHECK -->|"Some engagement<br/>(RL2)"| RL2_PATH["RL2 SEQUENCES"]
+    RL_CHECK -->|"High intent<br/>(RL1)"| RL1_PATH["RL1 SEQUENCES"]
+
+    subgraph RL3["RL3: Build Awareness"]
+        RL3_PATH --> RL3_IND{"Industry?"}
+        RL3_IND -->|"Retail"| RL3_RETAIL["RL3 Retail Sequence"]
+        RL3_IND -->|"Fintech"| RL3_FINTECH["RL3 Fintech Sequence"]
+        RL3_IND -->|"Other"| RL3_OTHER["RL3 General Sequence"]
     end
 
-    subgraph OUTREACH["OUTREACH.IO (Sales-Led)"]
-        O1["MQL follow-up"]
-        O2["High-tier Engaged accounts (RL1/RL2)"]
-        O3["Active Outreach accounts"]
-        O4["Open Opportunity multi-threading"]
+    subgraph RL2["RL2: Drive Engagement"]
+        RL2_PATH --> RL2_IND{"Industry?"}
+        RL2_IND -->|"Retail"| RL2_RETAIL["RL2 Retail Sequence"]
+        RL2_IND -->|"Fintech"| RL2_FINTECH["RL2 Fintech Sequence"]
+        RL2_IND -->|"Other"| RL2_OTHER["RL2 General Sequence"]
     end
 
-    INACTIVE["Inactive Account"] --> U1
-    U1 -->|"Engages"| ENGAGED["Engaged Account"]
-    ENGAGED --> U2
-    ENGAGED --> O2
-    U2 -->|"MQL"| O1
-    O2 -->|"Sales contacts"| ACTIVE["Active Outreach"]
-    O1 --> ACTIVE
-    ACTIVE --> O3
-    O3 --> OPP["Open Opportunity"]
-    OPP --> O4
-    OPP -->|"Won"| M1
-    OPP -->|"Lost"| M3
-    ACTIVE -->|"No traction"| M3
+    subgraph RL1["RL1: Book Meetings"]
+        RL1_PATH --> RL1_IND{"Industry?"}
+        RL1_IND -->|"Retail"| RL1_RETAIL["RL1 Retail Sequence"]
+        RL1_IND -->|"Fintech"| RL1_FINTECH["RL1 Fintech Sequence"]
+        RL1_IND -->|"Other"| RL1_OTHER["RL1 General Sequence"]
+    end
 
-    style MARKETO fill:#f3e5f5,stroke:#9c27b0
-    style UNIFY fill:#e3f2fd,stroke:#2196f3
-    style OUTREACH fill:#e8f5e9,stroke:#4caf50
+    RL3_RETAIL & RL3_FINTECH & RL3_OTHER --> RL3_OUTCOME{"Engages?"}
+    RL3_OUTCOME -->|"Yes"| UPGRADE2["⬆️ Move to RL2"]
+    RL3_OUTCOME -->|"No"| STAY3["Stay in RL3<br/>(continue sequence)"]
+    UPGRADE2 --> RL2_PATH
+
+    RL2_RETAIL & RL2_FINTECH & RL2_OTHER --> RL2_OUTCOME{"Response?"}
+    RL2_OUTCOME -->|"MQL"| REP["👤 REP TAKES OVER"]
+    RL2_OUTCOME -->|"Engagement"| UPGRADE1["⬆️ Move to RL1"]
+    RL2_OUTCOME -->|"Goes dark 90d"| DOWNGRADE["⬇️ Back to RL3"]
+    UPGRADE1 --> RL1_PATH
+    DOWNGRADE --> RL3_PATH
+
+    RL1_RETAIL & RL1_FINTECH & RL1_OTHER --> RL1_OUTCOME{"Response?"}
+    RL1_OUTCOME -->|"Any response"| REP
+    RL1_OUTCOME -->|"No response"| RL1_CONT["Continue RL1 sequence"]
+
+    REP --> MEETING{"Meeting<br/>booked?"}
+    MEETING -->|"Yes"| OPP["🎯 OPPORTUNITY"]
+    MEETING -->|"No traction"| NURTURE["Marketing Nurture<br/>(60 day cooling)"]
+    NURTURE -->|"Re-engages"| RL_CHECK
+
+    style E1 fill:#e8f5e9,stroke:#4caf50
+    style E2 fill:#e3f2fd,stroke:#2196f3
+    style E3 fill:#fce4ec,stroke:#e91e63
+    style REP fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
+    style OPP fill:#c8e6c9,stroke:#388e3c,stroke-width:3px
+    style NURTURE fill:#e1bee7,stroke:#9c27b0
             </div>
         </div>
 
-        <!-- The Decision Logic -->
-        <div class="card" style="background: #f5f5f5; border: 2px solid #333;">
-            <h2>The Decision Logic</h2>
-            <div style="font-family: monospace; font-size: 0.95rem; line-height: 2; padding: 16px; background: white; border-radius: 8px;">
-                <div><strong>WHEN</strong> new account enters TAL:</div>
-                <div style="padding-left: 24px;">→ Account Status = <span style="background: #ffcdd2; padding: 2px 8px; border-radius: 4px;">Inactive</span></div>
-                <div style="padding-left: 24px;">→ Readiness = <span style="background: #e3f2fd; padding: 2px 8px; border-radius: 4px;">RL3</span></div>
-                <div style="padding-left: 24px;">→ Tool = <strong>Unify</strong> (cold outreach, thought leadership)</div>
+        <!-- Event-Specific Flow -->
+        <div class="card" style="border: 2px solid #2196f3;">
+            <h2>2a. Event Attendee Flow (Example: eTail West)</h2>
+            <p style="margin-bottom: 16px;">When we have a list of event attendees, we still classify by RL, but run event-specific sequences:</p>
 
-                <div style="margin-top: 16px;"><strong>WHEN</strong> account shows engagement (website, email, ad click):</div>
-                <div style="padding-left: 24px;">→ Account Status changes to <span style="background: #b2ebf2; padding: 2px 8px; border-radius: 4px;">Engaged</span></div>
-                <div style="padding-left: 24px;">→ Readiness = <span style="background: #fff3e0; padding: 2px 8px; border-radius: 4px;">RL2</span> (or RL1 if high-intent signal)</div>
-                <div style="padding-left: 24px;">→ Tool = <strong>Outreach</strong> (high-tier) or <strong>Unify</strong> (lower-tier)</div>
+            <div class="mermaid">
+flowchart LR
+    EVENT["📅 eTail Attendee List<br/>(500 accounts)"] --> CHECK{"Check each<br/>account's RL"}
 
-                <div style="margin-top: 16px;"><strong>WHEN</strong> contact becomes MQL or Sales contacts them:</div>
-                <div style="padding-left: 24px;">→ Account Status changes to <span style="background: #c8e6c9; padding: 2px 8px; border-radius: 4px;">Active Outreach</span></div>
-                <div style="padding-left: 24px;">→ Readiness = <span style="background: #c8e6c9; padding: 2px 8px; border-radius: 4px;">RL1</span></div>
-                <div style="padding-left: 24px;">→ Tool = <strong>Outreach.io</strong> (rep-led, 1:1)</div>
+    CHECK -->|"200 accounts"| RL3_E["RL3: eTail Awareness Sequence<br/>(We're at eTail too! Benchmarks...)"]
+    CHECK -->|"200 accounts"| RL2_E["RL2: eTail Engagement Sequence<br/>(Let's meet at eTail. Case study...)"]
+    CHECK -->|"100 accounts"| RL1_E["RL1: eTail Meeting Sequence<br/>(15 min at the show? Demo...)"]
 
-                <div style="margin-top: 16px;"><strong>WHEN</strong> opportunity is created:</div>
-                <div style="padding-left: 24px;">→ Account Status = <span style="background: #fff9c4; padding: 2px 8px; border-radius: 4px;">Open Opportunity</span></div>
-                <div style="padding-left: 24px;">→ Tool = <strong>Outreach.io</strong> (deal management, multi-threading)</div>
+    RL3_E --> OUT3["Continue nurturing"]
+    RL2_E --> OUT2{"MQL?"}
+    RL1_E --> OUT1["Rep follows up"]
 
-                <div style="margin-top: 16px;"><strong>WHEN</strong> deal is closed-lost or account goes cold:</div>
-                <div style="padding-left: 24px;">→ Account Status = <span style="background: #e1bee7; padding: 2px 8px; border-radius: 4px;">Nurture</span> (60 day cooling)</div>
-                <div style="padding-left: 24px;">→ Readiness resets to <span style="background: #e3f2fd; padding: 2px 8px; border-radius: 4px;">RL3</span></div>
-                <div style="padding-left: 24px;">→ Tool = <strong>Marketo</strong> (drip nurture)</div>
+    OUT2 -->|"Yes"| OUT1
+    OUT2 -->|"No"| OUT3
+
+    style EVENT fill:#e3f2fd,stroke:#2196f3
+    style RL3_E fill:#e3f2fd,stroke:#2196f3
+    style RL2_E fill:#fff3e0,stroke:#ff9800
+    style RL1_E fill:#c8e6c9,stroke:#4caf50
+            </div>
+
+            <div class="note-box">
+                <strong>Key point:</strong> The event is the entry point, but RL still determines intensity. RL3 accounts get lighter-touch event messaging; RL1 accounts get direct meeting asks.
             </div>
         </div>
 
-        <!-- The Key Insight -->
+        <!-- Sequence Details by RL -->
+        <div class="card">
+            <h2>3. Sequence Content by Readiness Level</h2>
+            <p style="margin-bottom: 20px;">Each RL has different goals, content themes, and cadence. Within each, we personalize by industry + persona.</p>
+
+            <div class="sequence-grid">
+                <!-- RL3 -->
+                <div class="sequence-card rl3">
+                    <h4>RL3: Awareness Sequence</h4>
+                    <p style="margin-bottom: 12px;"><strong>Goal:</strong> Get them to engage<br/><strong>Cadence:</strong> 5 touches over 6 weeks</p>
+
+                    <div class="touch"><span class="touch-num">Touch 1:</span> Industry benchmark / trend</div>
+                    <div class="touch"><span class="touch-num">Touch 2:</span> Thought leadership article</div>
+                    <div class="touch"><span class="touch-num">Touch 3:</span> "Did you see this?" (relevant news)</div>
+                    <div class="touch"><span class="touch-num">Touch 4:</span> Peer company mention</div>
+                    <div class="touch"><span class="touch-num">Touch 5:</span> Soft CTA (webinar, guide)</div>
+                </div>
+
+                <!-- RL2 -->
+                <div class="sequence-card rl2">
+                    <h4>RL2: Engagement Sequence</h4>
+                    <p style="margin-bottom: 12px;"><strong>Goal:</strong> Drive deeper engagement / MQL<br/><strong>Cadence:</strong> 6 touches over 4 weeks</p>
+
+                    <div class="touch"><span class="touch-num">Touch 1:</span> Follow up on their activity</div>
+                    <div class="touch"><span class="touch-num">Touch 2:</span> Relevant case study</div>
+                    <div class="touch"><span class="touch-num">Touch 3:</span> Guide/playbook offer</div>
+                    <div class="touch"><span class="touch-num">Touch 4:</span> Webinar invite</div>
+                    <div class="touch"><span class="touch-num">Touch 5:</span> ROI angle</div>
+                    <div class="touch"><span class="touch-num">Touch 6:</span> Soft meeting ask</div>
+                </div>
+
+                <!-- RL1 -->
+                <div class="sequence-card rl1">
+                    <h4>RL1: Meeting Sequence</h4>
+                    <p style="margin-bottom: 12px;"><strong>Goal:</strong> Book meeting<br/><strong>Cadence:</strong> 5 touches over 2 weeks</p>
+
+                    <div class="touch"><span class="touch-num">Touch 1:</span> Direct meeting ask + value prop</div>
+                    <div class="touch"><span class="touch-num">Touch 2:</span> Quick case study + meeting ask</div>
+                    <div class="touch"><span class="touch-num">Touch 3:</span> ROI calculator offer</div>
+                    <div class="touch"><span class="touch-num">Touch 4:</span> Peer reference offer</div>
+                    <div class="touch"><span class="touch-num">Touch 5:</span> "Worth 15 min?" final ask</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Industry + Persona Personalization -->
+        <div class="card">
+            <h2>4. Personalization: Industry × Persona Matrix</h2>
+            <p style="margin-bottom: 16px;">Within each RL sequence, content is personalized by industry and persona. This can be done via:</p>
+            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                <li><strong>Full sequence variants</strong> (separate sequences for each combo)</li>
+                <li><strong>Dynamic snippets</strong> (same sequence structure, but AI swaps in industry/persona-specific content)</li>
+            </ul>
+
+            <h3>Example: RL2 Sequence Variants</h3>
+            <table class="variant-table">
+                <thead>
+                    <tr>
+                        <th>Industry</th>
+                        <th>CX Leader</th>
+                        <th>Contact Center</th>
+                        <th>IT/Tech Buyer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Retail</strong></td>
+                        <td>
+                            Touch 2: "How [Retail Brand] improved CSAT..."<br/>
+                            Touch 3: Retail CX playbook
+                        </td>
+                        <td>
+                            Touch 2: "Omnichannel for retail..."<br/>
+                            Touch 3: Voice-to-digital guide
+                        </td>
+                        <td>
+                            Touch 2: "TCO comparison: retail stack..."<br/>
+                            Touch 3: Integration guide
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fintech</strong></td>
+                        <td>
+                            Touch 2: "How [Fintech Brand] handles compliance + CX..."<br/>
+                            Touch 3: Fintech CX playbook
+                        </td>
+                        <td>
+                            Touch 2: "Secure omnichannel for fintech..."<br/>
+                            Touch 3: Compliance + efficiency guide
+                        </td>
+                        <td>
+                            Touch 2: "Security-first architecture..."<br/>
+                            Touch 3: SOC2/compliance docs
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Travel/Hospitality</strong></td>
+                        <td>
+                            Touch 2: "How [Hotel Brand] scaled CX..."<br/>
+                            Touch 3: Hospitality CX playbook
+                        </td>
+                        <td>
+                            Touch 2: "Peak season readiness..."<br/>
+                            Touch 3: Surge handling guide
+                        </td>
+                        <td>
+                            Touch 2: "Multi-property deployment..."<br/>
+                            Touch 3: Integration architecture
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="note-box">
+                <strong>Practical approach:</strong> Build 3 base sequences (RL1, RL2, RL3). Use Unify's AI to dynamically insert industry + persona snippets into each touch. Don't need to build 27+ separate sequences.
+            </div>
+        </div>
+
+        <!-- When Rep Takes Over -->
+        <div class="card" style="border: 2px solid #9c27b0;">
+            <h2>5. When Does the Rep Take Over?</h2>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                <div style="padding: 20px; background: #f3e5f5; border-radius: 8px;">
+                    <h4 style="margin-bottom: 12px;">🎯 MQL Created</h4>
+                    <p style="font-size: 0.9rem;">Contact hits MQL threshold. Rep gets notified, takes over in Outreach.io for 1:1 follow-up.</p>
+                </div>
+                <div style="padding: 20px; background: #f3e5f5; border-radius: 8px;">
+                    <h4 style="margin-bottom: 12px;">💬 RL1 Response</h4>
+                    <p style="font-size: 0.9rem;">Any response from RL1 account. They're already high-intent, so rep jumps in immediately.</p>
+                </div>
+            </div>
+
+            <h3>What happens if rep can't convert?</h3>
+            <div style="padding: 16px; background: #e1bee7; border-radius: 8px; margin-top: 12px;">
+                <p><strong>→ Marketing Nurture (60 day cooling)</strong></p>
+                <p style="font-size: 0.9rem; margin-top: 8px;">Account goes to Marketo nurture. Not touched by sales. After cooling period or new engagement signal, they re-enter the Unify flow at their new RL.</p>
+            </div>
+        </div>
+
+        <!-- The Complete Picture -->
         <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-            <h2 style="color: white;">The Key Insight</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-                <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 8px;">
-                    <h3 style="margin-bottom: 12px;">Account Status Drives Tool Selection</h3>
-                    <ul style="margin-left: 20px; line-height: 1.8;">
-                        <li><strong>Inactive → Unify</strong> (automated cold)</li>
-                        <li><strong>Engaged → Unify or Outreach</strong> (by tier)</li>
-                        <li><strong>Active Outreach → Outreach.io</strong> (rep-led)</li>
-                        <li><strong>Open Opp → Outreach.io</strong> (deal mgmt)</li>
-                        <li><strong>Nurture → Marketo</strong> (drip)</li>
-                    </ul>
-                </div>
-                <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 8px;">
-                    <h3 style="margin-bottom: 12px;">Contact Status Drives Content Selection</h3>
-                    <ul style="margin-left: 20px; line-height: 1.8;">
-                        <li><strong>New</strong> → Brand awareness, value prop</li>
-                        <li><strong>Prospect</strong> → Follow-up on interest</li>
-                        <li><strong>MQL</strong> → Demo offers, case studies</li>
-                        <li><strong>Working/SQL</strong> → 1:1 personalized</li>
-                        <li><strong>Nurture</strong> → Drip, don't push</li>
-                    </ul>
-                </div>
+            <h2 style="color: white;">The Complete Picture</h2>
+
+            <div style="font-size: 1rem; line-height: 1.8;">
+                <p><strong>1. ENTRY:</strong> Account enters via TAL addition, event list, or high-value page visit</p>
+                <p><strong>2. CLASSIFY:</strong> Check Readiness Level (RL1, RL2, RL3)</p>
+                <p><strong>3. SEQUENCE:</strong> Unify runs appropriate sequence, personalized by industry + persona</p>
+                <p><strong>4. MONITOR:</strong> Watch for engagement, MQL, or response</p>
+                <p><strong>5. HANDOFF:</strong> MQL or RL1 response → Rep takes over</p>
+                <p><strong>6. OUTCOME:</strong> Meeting → Opp, or No traction → Marketing Nurture → Re-enter later</p>
             </div>
-            <p style="margin-top: 24px; text-align: center; font-size: 1.1rem;">
-                <strong>Readiness Level determines HOW MUCH to invest at each stage.</strong>
-            </p>
+
+            <div style="margin-top: 24px; padding: 16px; background: rgba(255,255,255,0.15); border-radius: 8px;">
+                <strong>The key principle:</strong> Automation handles everything until MQL or RL1 response. Rep only works qualified/high-intent accounts. Everyone else stays in the machine.
+            </div>
         </div>
 
         <!-- Open Questions -->
         <div class="card" style="background: #fff3e0; border-left: 4px solid #ff9800;">
-            <h2>Open Questions</h2>
+            <h2>Questions to Finalize</h2>
             <ol style="margin-left: 20px; line-height: 2;">
-                <li>How do we operationalize the Engaged → Active Outreach handoff? (MQL threshold? Rep picks up?)</li>
-                <li>What defines "high-tier" vs "lower-tier" within RL2? (ARR potential? Segment?)</li>
-                <li>How does multi-threading work within Active Outreach? (Unify or Outreach for additional contacts?)</li>
-                <li>What triggers the move from Nurture back to Engaged? (New campaign response?)</li>
-                <li>Where does the skill chain (AI research + personalization) run? (Unify only? Or Claude → Outreach too?)</li>
+                <li>Which industries are we building sequences for? (Retail, Fintech, Travel, ...?)</li>
+                <li>Which personas are we targeting? (CX Leader, Contact Center, IT, CDO, ...?)</li>
+                <li>Do we have the content assets for each touch theme?</li>
+                <li>What events are coming up that need event-specific sequences?</li>
+                <li>What pages count as "high-value" for auto-upgrade to RL1?</li>
+                <li>What's the MQL threshold definition?</li>
             </ol>
         </div>
     </div>
@@ -442,13 +431,15 @@ flowchart TD
             themeVariables: {
                 primaryColor: '#667eea',
                 primaryTextColor: '#333',
-                lineColor: '#999',
-                fontSize: '14px'
+                lineColor: '#666',
+                fontSize: '12px'
             },
             flowchart: {
                 useMaxWidth: true,
                 htmlLabels: true,
-                curve: 'basis'
+                curve: 'basis',
+                nodeSpacing: 40,
+                rankSpacing: 50
             }
         });
     </script>
